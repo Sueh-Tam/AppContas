@@ -35,7 +35,16 @@ export class DataStore {
 
   addConta(conta) {
     // Validação básica de dados
-    if (!conta || !conta.data || !conta.descricao || !conta.local || !conta.categoria || typeof conta.valor !== 'number') {
+    if (
+      !conta ||
+      !conta.data ||
+      !conta.descricao ||
+      !conta.local ||
+      !conta.categoria ||
+      !conta.quemPagou ||
+      !conta.metodoPagamento ||
+      typeof conta.valor !== 'number'
+    ) {
       throw new Error('Conta inválida');
     }
     this._contas.push({ ...conta });

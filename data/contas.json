@@ -1,3 +1,20 @@
 [
-  
+  {
+    "data": "2025-01-10",
+    "descricao": "Compra de materiais",
+    "local": "Papelaria Central",
+    "categoria": "Mercado",
+    "quemPagou": "Matheus",
+    "metodoPagamento": "Pix",
+    "valor": 120.50
+  },
+  {
+    "data": "2025-02-02",
+    "descricao": "Almoço de equipe",
+    "local": "Restaurante Bom Sabor",
+    "categoria": "Almoço fora",
+    "quemPagou": "Ana",
+    "metodoPagamento": "Crédito",
+    "valor": 230.00
+  }
 ]

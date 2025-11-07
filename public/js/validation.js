@@ -24,9 +24,11 @@ export class Validation {
     const data = form.querySelector('#data')?.value;
     const categoria = form.querySelector('#categoria')?.value;
     const categoriaOutros = form.querySelector('#categoriaOutros')?.value?.trim();
+    const quemPagou = form.querySelector('#quemPagou')?.value;
+    const metodoPagamento = form.querySelector('#metodoPagamento')?.value;
 
     const categoriaValida = categoria === 'Outros' ? Boolean(categoriaOutros) : Boolean(categoria);
-    const ok = Boolean(data) && Boolean(descricao) && Boolean(local) && categoriaValida && Number.isFinite(valor) && valor >= 0;
+    const ok = Boolean(data) && Boolean(descricao) && Boolean(local) && categoriaValida && Boolean(quemPagou) && Boolean(metodoPagamento) && Number.isFinite(valor) && valor >= 0;
     return ok;
   }
 }

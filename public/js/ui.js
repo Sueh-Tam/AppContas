@@ -24,6 +24,8 @@ export class UI {
         <td>${this.escapeHtml(c.descricao)}</td>
         <td class="d-none d-md-table-cell">${this.escapeHtml(c.local)}</td>
         <td>${this.escapeHtml(c.categoria ?? '')}</td>
+        <td class="d-none d-lg-table-cell">${this.escapeHtml(c.quemPagou ?? '')}</td>
+        <td class="d-none d-lg-table-cell">${this.escapeHtml(c.metodoPagamento ?? '')}</td>
         <td class="text-end">${this.formatCurrency(c.valor)}</td>
       `;
       this.tableBody.appendChild(tr);
@@ -38,7 +40,7 @@ export class UI {
   }
 
   applyFilters(contas, filtros) {
-    const { dataDe, dataAte, valorMin, valorMax } = filtros || {};
+    const { dataDe, dataAte, valorMin, valorMax, quemPagou, metodoPagamento } = filtros || {};
     return contas.filter((c) => {
       const dataOk = (() => {
         if (!dataDe && !dataAte) return true;
@@ -53,7 +55,15 @@ export class UI {
         if (valorMax && v > Number(valorMax)) return false;
         return true;
       })();
-      return dataOk && valorOk;
+      const quemPagouOk = (() => {
+        if (!quemPagou) return true;
+        return String(c.quemPagou || '') === String(quemPagou);
+      })();
+      const metodoOk = (() => {
+        if (!metodoPagamento) return true;
+        return String(c.metodoPagamento || '') === String(metodoPagamento);
+      })();
+      return dataOk && valorOk && quemPagouOk && metodoOk;
     });
   }
 

@@ -18,6 +18,8 @@ const filtros = {
   dataAte: null,
   valorMin: null,
   valorMax: null,
+  quemPagou: null,
+  metodoPagamento: null,
 };
 
 async function init() {
@@ -30,7 +32,7 @@ async function init() {
 
     // Renderização inicial
     ui.renderTable(store.getContas(), filtros);
-    ui.updateTotal(store.getContas());
+    ui.updateTotal(store.getContas(), filtros);
 
     // Eventos de formulário
     const form = document.getElementById('contaForm');
@@ -61,6 +63,8 @@ async function init() {
         categoria: (document.getElementById('categoria').value === 'Outros'
           ? document.getElementById('categoriaOutros').value.trim()
           : document.getElementById('categoria').value),
+        quemPagou: document.getElementById('quemPagou').value,
+        metodoPagamento: document.getElementById('metodoPagamento').value,
         valor: Number(document.getElementById('valor').value),
       };
 
@@ -68,7 +72,7 @@ async function init() {
         store.addConta(novaConta);
         await store.persist();
         ui.renderTable(store.getContas(), filtros);
-        ui.updateTotal(store.getContas());
+        ui.updateTotal(store.getContas(), filtros);
         form.reset();
         form.classList.remove('was-validated');
         // Reaplicar estado do campo "Outros"
@@ -84,9 +88,9 @@ async function init() {
     });
 
     // Eventos de filtros
-    const bindFiltro = (id, key) => {
+    const bindFiltro = (id, key, eventName = 'input') => {
       const el = document.getElementById(id);
-      el.addEventListener('input', () => {
+      el.addEventListener(eventName, () => {
         filtros[key] = el.value || null;
         ui.renderTable(store.getContas(), filtros);
         ui.updateTotal(store.getContas(), filtros);
@@ -97,6 +101,8 @@ async function init() {
     bindFiltro('filtroDataAte', 'dataAte');
     bindFiltro('filtroValorMin', 'valorMin');
     bindFiltro('filtroValorMax', 'valorMax');
+    bindFiltro('filtroQuemPagou', 'quemPagou', 'change');
+    bindFiltro('filtroMetodoPagamento', 'metodoPagamento', 'change');
 
     // Importar/Exportar JSON
     const importInput = document.getElementById('importJson');
@@ -109,7 +115,7 @@ async function init() {
         store.replaceAll(contas);
         await store.persist();
         ui.renderTable(store.getContas(), filtros);
-        ui.updateTotal(store.getContas());
+        ui.updateTotal(store.getContas(), filtros);
         ui.showFeedback('Importação concluída.', 'success');
       } catch (err) {
         console.error(err);

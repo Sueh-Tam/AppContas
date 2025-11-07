@@ -28,7 +28,7 @@
 
       // Teste 2: persistência local
       const lenBefore = store.getContas().length;
-      store.addConta({ data: '2025-03-01', descricao: 'Teste persistência', local: 'Local X', categoria: 'Mercado', valor: 10 });
+      store.addConta({ data: '2025-03-01', descricao: 'Teste persistência', local: 'Local X', categoria: 'Mercado', quemPagou: 'Matheus', metodoPagamento: 'Pix', valor: 10 });
       await store.persist();
       const store2 = new DataStore();
       await store2.init();
