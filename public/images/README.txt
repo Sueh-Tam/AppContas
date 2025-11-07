@@ -1,0 +1,1 @@
+Coloque aqui recursos visuais (logos, ícones, etc.).
