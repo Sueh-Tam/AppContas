@@ -14,7 +14,7 @@ export class CategoryStore {
       return;
     }
     try {
-      const resp = await fetch('/data/categorias.json');
+      const resp = await fetch('./data/categorias.json');
       if (resp.ok) {
         const json = await resp.json();
         if (Array.isArray(json)) {

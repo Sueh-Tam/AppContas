@@ -15,7 +15,7 @@ export class DataStore {
     }
     // Bootstrap inicial a partir do arquivo JSON
     try {
-      const resp = await fetch('/data/contas.json');
+      const resp = await fetch('./data/contas.json');
       if (resp.ok) {
         const json = await resp.json();
         if (Array.isArray(json)) {
