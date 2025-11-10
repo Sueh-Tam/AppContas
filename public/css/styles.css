@@ -1,5 +1,19 @@
 /* styles.css - ajustes leves de layout */
 
+/* Manter a coluna de ações sempre visível em tabelas com scroll */
+#contasTable th:last-child,
+#contasTable td:last-child {
+  position: sticky;
+  right: 0;
+  background: #fff;
+  z-index: 2; /* acima das outras células para não ficar escondido */
+}
+
+/* Melhorar clique em dispositivos móveis */
+#contasTable td:last-child .btn {
+  min-width: 84px;
+}
+
 body {
   background-color: #f8f9fa;
 }

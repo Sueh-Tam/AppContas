@@ -27,6 +27,9 @@ export class UI {
         <td class="d-none d-lg-table-cell">${this.escapeHtml(c.quemPagou ?? '')}</td>
         <td class="d-none d-lg-table-cell">${this.escapeHtml(c.metodoPagamento ?? '')}</td>
         <td class="text-end">${this.formatCurrency(c.valor)}</td>
+        <td class="text-end">
+          <button type="button" class="btn btn-sm btn-outline-danger" data-action="delete" data-id="${this.escapeHtml(c.id)}">Remover</button>
+        </td>
       `;
       this.tableBody.appendChild(tr);
     }
@@ -81,8 +84,24 @@ export class UI {
   }
 
   formatDate(iso) {
-    // Mostra como yyyy-mm-dd; poderia formatar para dd/mm/yyyy se preferir
-    return iso || '';
+    if (!iso) return '';
+    // Formato amigável dd/mm/aaaa sem risco de timezone
+    const rx = /^(\d{4})-(\d{2})-(\d{2})$/;
+    const m = rx.exec(iso);
+    if (m) {
+      const [, y, mm, dd] = m;
+      return `${dd}/${mm}/${y}`;
+    }
+    // Fallback para datas fora do padrão
+    try {
+      const d = new Date(iso);
+      const dd = String(d.getDate()).padStart(2, '0');
+      const mm = String(d.getMonth() + 1).padStart(2, '0');
+      const y = d.getFullYear();
+      return `${dd}/${mm}/${y}`;
+    } catch (_) {
+      return iso;
+    }
   }
 
   escapeHtml(str) {

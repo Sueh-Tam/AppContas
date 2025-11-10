@@ -10,7 +10,7 @@ export class DataStore {
   async init() {
     const fromStorage = this._readLocal();
     if (fromStorage && Array.isArray(fromStorage)) {
-      this._contas = fromStorage;
+      this._contas = this._ensureIds(fromStorage);
       return;
     }
     // Bootstrap inicial a partir do arquivo JSON
@@ -19,7 +19,7 @@ export class DataStore {
       if (resp.ok) {
         const json = await resp.json();
         if (Array.isArray(json)) {
-          this._contas = json;
+          this._contas = this._ensureIds(json);
           this._writeLocal();
         }
       }
@@ -47,12 +47,12 @@ export class DataStore {
     ) {
       throw new Error('Conta inválida');
     }
-    this._contas.push({ ...conta });
+    this._contas.push({ id: this._generateId(), ...conta });
   }
 
   replaceAll(novasContas) {
     if (!Array.isArray(novasContas)) throw new Error('Formato inválido');
-    this._contas = novasContas.map((c) => ({ ...c }));
+    this._contas = this._ensureIds(novasContas.map((c) => ({ ...c })));
   }
 
   async persist() {
@@ -88,5 +88,23 @@ export class DataStore {
 
   _writeLocal() {
     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this._contas));
+  }
+
+  removeContaById(id) {
+    const before = this._contas.length;
+    this._contas = this._contas.filter((c) => c.id !== id);
+    if (this._contas.length === before) throw new Error('Conta não encontrada');
+  }
+
+  _ensureIds(list) {
+    return list.map((c) => ({ id: c.id || this._generateId(), ...c }));
+  }
+
+  _generateId() {
+    try {
+      return crypto.randomUUID();
+    } catch (_) {
+      return 'id-' + Date.now() + '-' + Math.floor(Math.random() * 1e9);
+    }
   }
 }
